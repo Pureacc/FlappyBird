@@ -1,6 +1,7 @@
 package com.jaroncouvreur.flappy.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -41,20 +42,17 @@ public class Tube {
         return boundsBot.overlaps(player) || boundsTop.overlaps(player);
     }
 
+    public void draw(SpriteBatch batch) {
+        batch.draw(bot, posBot.x, posBot.y);
+        batch.draw(top, posTop.x, posTop.y);
+    }
+
     public Texture getBot() {
         return bot;
     }
 
-    public Texture getTop() {
-        return top;
-    }
-
     public Vector2 getPosBot() {
         return posBot;
-    }
-
-    public Vector2 getPosTop() {
-        return posTop;
     }
 
     public void dispose() {

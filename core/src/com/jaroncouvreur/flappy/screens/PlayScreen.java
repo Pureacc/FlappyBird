@@ -21,6 +21,7 @@ class PlayScreen extends GameScreen {
     private final Bird bird;
     private final List<Tube> tubes;
     private final Ground ground;
+//    private final Music speech;
 
     PlayScreen(SpriteBatch batch, ScreenManager screenManager) {
         super(batch, screenManager);
@@ -30,6 +31,8 @@ class PlayScreen extends GameScreen {
             tubes.add(new Tube(i * (TUBE_SPACING + Tube.WIDTH)));
         }
         ground = new Ground(50);
+//        speech = Gdx.audio.newMusic(Gdx.files.internal("speech.mp3"));
+//        speech.play();
         cam.setToOrtho(false, FlappyBird.WIDTH / 2, FlappyBird.HEIGHT / 2);
     }
 
@@ -49,8 +52,8 @@ class PlayScreen extends GameScreen {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
         batch.draw(background, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2, cam.viewportWidth, cam.viewportHeight);
-        batch.draw(bird.getImg(), bird.getPosition().x, bird.getPosition().y);
-        renderTubes();
+        bird.draw(batch);
+        tubes.forEach(t -> t.draw(batch));
         ground.draw(batch);
         batch.end();
     }
@@ -61,6 +64,7 @@ class PlayScreen extends GameScreen {
         bird.dispose();
         tubes.forEach(Tube::dispose);
         ground.dispose();
+//        speech.dispose();
     }
 
     private void checkCollision() {
@@ -85,13 +89,6 @@ class PlayScreen extends GameScreen {
         if (Gdx.input.justTouched()) {
             bird.jump();
         }
-    }
-
-    private void renderTubes() {
-        tubes.forEach(t -> {
-            batch.draw(t.getBot(), t.getPosBot().x, t.getPosBot().y);
-            batch.draw(t.getTop(), t.getPosTop().x, t.getPosTop().y);
-        });
     }
 
 }

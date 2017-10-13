@@ -1,6 +1,8 @@
 package com.jaroncouvreur.flappy.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -11,19 +13,22 @@ import com.badlogic.gdx.math.Vector2;
 public class Bird {
     private static final int GRAVITY = -15;
     private static final int MOVEMENT = 100;
-    private final Texture img;
     private final Rectangle bounds;
+    private final Sound jumpSnd;
+    private final Animation animation;
     private Vector2 position;
     private Vector2 velocity;
 
     public Bird(float posX, float posY) {
-        img = new Texture("bird.png");
         position = new Vector2(posX, posY);
-        bounds = new Rectangle(position.x, position.y, img.getWidth(), img.getHeight());
         velocity = new Vector2(0, 0);
+        jumpSnd = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
+        animation = new BirdAnimation();
+        bounds = new Rectangle(position.x, position.y, animation.getWidth(), animation.getHeight());
     }
 
     public void update(float dt) {
+        animation.update(dt);
         velocity.add(0, GRAVITY);
         velocity.scl(dt);
         position.add(MOVEMENT * dt, velocity.y);
@@ -33,14 +38,15 @@ public class Bird {
 
     public void jump() {
         velocity.y = 250;
+        jumpSnd.play();
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.draw(animation.getFrame(), position.x, position.y);
     }
 
     public Rectangle getBounds() {
         return bounds;
-    }
-
-    public Texture getImg() {
-        return img;
     }
 
     public Vector2 getPosition() {
@@ -48,6 +54,7 @@ public class Bird {
     }
 
     public void dispose() {
-        img.dispose();
+        animation.dispose();
+        jumpSnd.dispose();
     }
 }
