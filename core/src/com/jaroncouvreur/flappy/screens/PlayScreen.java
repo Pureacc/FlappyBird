@@ -11,6 +11,8 @@ import com.jaroncouvreur.flappy.sprites.Tube;
 import java.util.ArrayList;
 import java.util.List;
 
+import java8.util.stream.StreamSupport;
+
 /**
  * Created by Jaron on 9/10/2017.
  */
@@ -53,7 +55,7 @@ class PlayScreen extends GameScreen {
         batch.begin();
         batch.draw(background, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2, cam.viewportWidth, cam.viewportHeight);
         bird.draw(batch);
-        tubes.forEach(t -> t.draw(batch));
+        StreamSupport.stream(tubes).forEach(t -> t.draw(batch));
         ground.draw(batch);
         batch.end();
     }
@@ -62,20 +64,20 @@ class PlayScreen extends GameScreen {
     public void dispose() {
         super.dispose();
         bird.dispose();
-        tubes.forEach(Tube::dispose);
+        StreamSupport.stream(tubes).forEach(Tube::dispose);
         ground.dispose();
 //        speech.dispose();
     }
 
     private void checkCollision() {
         Rectangle birdBounds = bird.getBounds();
-        if (tubes.stream().anyMatch(t -> t.collides(birdBounds)) || ground.collides(birdBounds)) {
+        if (StreamSupport.stream(tubes).anyMatch(t -> t.collides(birdBounds)) || ground.collides(birdBounds)) {
             screenManager.showGameOverScreen();
         }
     }
 
     private void updateTubes() {
-        tubes.stream()
+        StreamSupport.stream(tubes)
                 .filter(t -> cam.position.x - cam.viewportWidth / 2 > t.getPosBot().x + t.getBot().getWidth())
                 .forEach(t -> t.reposition(t.getPosBot().x + (Tube.WIDTH + TUBE_SPACING) * TUBE_COUNT));
     }

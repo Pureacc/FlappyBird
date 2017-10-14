@@ -5,12 +5,12 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://jitpack.io" }
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-        
-
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
     }
 }
 
@@ -74,12 +74,16 @@ project(":android") {
 
 project(":core") {
     apply plugin: "java"
-
+    apply plugin: 'me.tatarka.retrolambda'
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        
+        compile 'net.sourceforge.streamsupport:streamsupport:1.5.6'
+        compile 'net.sourceforge.streamsupport:streamsupport-cfuture:1.5.6'
+        compile 'net.sourceforge.streamsupport:streamsupport-atomic:1.5.6'
+        compile 'net.sourceforge.streamsupport:streamsupport-flow:1.5.6'
+        compile 'net.sourceforge.streamsupport:streamsupport-literal:1.5.6'
     }
 }
 
